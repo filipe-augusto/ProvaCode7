@@ -29,6 +29,7 @@ namespace ProvaCode7.Server
 
 
 
+
         [HttpGet("PegaLista")]
         public async Task<ActionResult<List<ClienteListModelView>>> PegaLista()
         {
