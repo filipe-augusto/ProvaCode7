@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -5,6 +6,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProvaCode7.Models;
+using ProvaCode7.Shared;
 using System.Linq;
 
 namespace ProvaCode7.Server
@@ -26,6 +29,27 @@ namespace ProvaCode7.Server
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDbContext<AppDbContext>();
+
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Cliente, ClienteViewModel>();
+                cfg.CreateMap<ClienteViewModel, Cliente>();
+
+                cfg.CreateMap<Cliente, ClienteListModelView>();
+                cfg.CreateMap<ClienteListModelView, Cliente>();
+                
+
+                cfg.CreateMap<Endereco, EnderecoViewModel>();
+                cfg.CreateMap<EnderecoViewModel, Endereco>();
+
+            });
+
+
+                IMapper mapper = config.CreateMapper();
+
+            services.AddSingleton(mapper);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
