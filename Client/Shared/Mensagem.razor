@@ -1,0 +1,22 @@
+﻿
+@if (Exibir)
+{
+    <div class="alert alert-primary" role="alert">
+        @Texto
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public string TipoMensagem { get; set; } = "primary";
+    [Parameter]
+    public string Texto { get; set; } = "Atenção";
+
+    [Parameter]
+    public bool Exibir { get; set; } = false;
+
+
+    //secondary  success danger warning info
+
+}

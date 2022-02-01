@@ -1,0 +1,90 @@
+﻿@page "/ListaClientes/NovoCliente"
+@inject HttpClient http
+@inject NavigationManager navigation
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="/ListaClientes">Clientes</a></li>
+            <li class="breadcrumb-item"><span>Novo</span></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class=" card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12">
+                            Novo Cliente
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <Mensagem Texto="@_mensagem" TipoMensagem="@_tipoMensagem"></Mensagem>
+                        </div>
+                    </div>
+                    @if (viewModel != null)
+                    {
+                        <FomularioClienteForm ViewModel="viewModel" OnValidSubmit="Criar" SubmitForm="submit" TextoBotao="Criar"> </FomularioClienteForm>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@code {
+    ClienteViewModel viewModel;// = new ClienteViewModel();
+    bool submit = false;
+    #region conf mensagem
+    string _mensagem = "";
+    string _tipoMensagem = "";
+    bool _exibir;
+    #endregion
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        viewModel = new ClienteViewModel();
+    }
+
+
+    async Task Criar()
+    {
+        try
+        {
+            submit = true;
+            var httpResponse = await http.PostAsJsonAsync("api/Cliente", viewModel);
+
+            if (httpResponse.IsSuccessStatusCode)
+            {
+              await  ChamaMensagem("Cliente Criado com sucesso!", "success");
+              navigation.NavigateTo("/ListaClientes");
+            }
+        }
+        catch (Exception ex)
+        {
+
+
+        }
+        finally
+        {
+            submit = false;
+        }
+    }
+
+    async Task ChamaMensagem(string mensagem, string tipomensagem)
+    {
+        _mensagem = mensagem;
+        _tipoMensagem = tipomensagem;
+        _exibir = true;
+        await  Task.Delay(2000);
+        _exibir = false;
+    }
+
+}

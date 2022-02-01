@@ -1,0 +1,148 @@
+﻿@if (ViewModel != null)
+{
+
+<EditForm Model="@ViewModel" OnValidSubmit="@OnValidSubmit" class="form-horizontal">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Nome: </label>
+                        <InputText @bind-Value="ViewModel.Nome" type="text" class="form-control" />
+                        <ValidationMessage For="@(()=> ViewModel.Nome)" />
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">CPF: </label>
+                        <InputText @bind-Value="ViewModel.Cpf" type="text" class="form-control" />
+                        <ValidationMessage For="@(()=> ViewModel.Cpf)" />
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Telefone: </label>
+                        <InputText @bind-Value="ViewModel.Telefone" type="text" class="form-control" />
+                        <ValidationMessage For="@(()=> ViewModel.Telefone)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @*<div class="col-4">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Telefone: </label>
+                <InputText @bind-Value="ViewModel.IdStatus" type="text" class="form-control" />
+                <ValidationMessage For="@(()=> ViewModel.Telefone)" />
+                    </div>
+                </div>*@
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Credito: </label>
+                <InputNumber @bind-Value="ViewModel.Credito" type="text" class="form-control" disabled/>
+                <ValidationMessage For="@(()=> ViewModel.Credito)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (ViewModel.Endereco != null)
+        {
+
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Cep: </label>
+                        <InputText @bind-Value="ViewModel.Endereco.Cep" type="text" class="form-control" />
+                        <ValidationMessage For="@(() => ViewModel.Endereco.Cep)" />
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Logradouro: </label>
+                        <InputText @bind-Value="ViewModel.Endereco.Logradouro" type="text" class="form-control" />
+                        <ValidationMessage For="@(() => ViewModel.Endereco.Logradouro)" />
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Numero: </label>
+                        <InputText @bind-Value="ViewModel.Endereco.Numero" type="text" class="form-control" />
+                        <ValidationMessage For="@(() => ViewModel.Endereco.Numero)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-3">
+                        <label class="form-label" form="Name">Bairro: </label>
+                        <InputText @bind-Value="ViewModel.Endereco.Bairro" type="text" class="form-control" />
+                        <ValidationMessage For="@(() => ViewModel.Endereco.Bairro)" />
+
+                    </div>
+                    <div class="col-3">
+                        <label class="form-label" form="Name">Cidade: </label>
+                        <InputText @bind-Value="ViewModel.Endereco.Cidade" type="text" class="form-control" />
+                        <ValidationMessage For="@(() => ViewModel.Endereco.Cidade)" />
+
+                    </div>
+                    <div class="col-3">
+                        <label class="form-label" form="Name">Estado: </label>
+                        <InputText @bind-Value="ViewModel.Endereco.Estado" type="text" class="form-control" />
+                        <ValidationMessage For="@(() => ViewModel.Endereco.Estado)" />
+                    </div>
+                    <div class="col-3">
+                        <label class="form-label" form="Name">Complemento: </label>
+                        <InputText @bind-Value="ViewModel.Endereco.Complemento" type="text" class="form-control" />
+                        <ValidationMessage For="@(() => ViewModel.Endereco.Complemento)" />
+                    </div>
+                </div>
+                </div>
+
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-2 text-left">
+                    <button type="button" class="btn btn-secondary" @onclick="Voltar" disabled="@SubmitForm">Voltar</button>
+                </div>
+                <div class="col-6 text-center">
+                    @if (SubmitForm)
+                    {
+                    <p>Carregando...</p>
+                    }
+                </div>
+                <div class="col-4">
+                    <button type="submit" class="btn btn-success" disabled="@SubmitForm">@TextoBotao</button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+
+</EditForm>
+}
+@code {
+
+    [Parameter]
+    public ClienteViewModel ViewModel { get; set; }
+
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    [Parameter]
+    public string TextoBotao { get; set; } = "Salvar";
+
+    [Parameter]
+    public bool SubmitForm { get; set; }
+
+    [Inject]
+    public NavigationManager navigation { get; set; }
+ 
+    void Voltar()
+    {
+        navigation.NavigateTo("/ListaClientes");
+    }
+
+}
