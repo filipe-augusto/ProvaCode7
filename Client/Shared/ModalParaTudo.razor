@@ -1,0 +1,75 @@
+﻿@inject IJSRuntime jsRuntime
+@if (ExibirConfirmacao)
+{
+    <div class="modal-backdrop show"></div>
+    <div id="modalDefault" class="modal" tabindex="-1" role="dialog"
+         aria-hidden="true" style="display:block;">
+        <div class="modal-dialog @CssClassTamanho " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@Titulo</h5>
+                    <button @onclick="onCancela" type="button" class="close"
+                            data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @ChildContent
+                </div>
+                <div class="modal-footer">
+                    @if (Submit)
+                    {
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-actions">
+                                    <center>
+                                         <p>Aguarde, enviando dados...</p>
+                                    </center>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <button @onclick="onCancela" type="button" class="@ClassebtnCancelar"
+                                data-dismiss="modal">
+                            <i class="feather mr-2 icon-slash"></i>   @NomeBotaoCancelar
+                        </button>
+                        if (OcultarConfirmar == false)
+                        {
+                            <button @onclick="onConfirma" type="button"
+                                    class="btn btn-success ">
+                                <i class="@ClasseIcone"></i>  @NomeBotaoConfirmar
+                            </button>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public bool ExibirConfirmacao { get; set; } = false;
+    [Parameter] public bool OcultarConfirmar { get; set; } = false;
+    [Parameter] public bool Submit { get; set; } = false;
+    [Parameter] public string CssClassTamanho { get; set; } = string.Empty;
+    [Parameter] public string Titulo { get; set; } = "Confirma Exclusão ?";
+    [Parameter] public string NomeBotaoCancelar { get; set; } = "Cancelar";
+    [Parameter] public string NomeBotaoConfirmar { get; set; } = "Confirmar";
+    [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public EventCallback onConfirma { get; set; }
+    [Parameter] public EventCallback onCancela { get; set; }
+    [Parameter] public string ClasseIcone { get; set; } = "feather mr-2 icon-check-circle";
+    [Parameter] public string ClassebtnCancelar { get; set; } = "btn btn-secondary";
+    [Parameter] public bool CarregaTabelaJs { get; set; } = false;
+
+    public void Exibir() => ExibirConfirmacao = true;
+    public void Ocultar() => ExibirConfirmacao = false;
+    public void SubmitTrue() => Submit = true;
+    public void SubmitFalse() => Submit = false;
+
+
+
+
+}

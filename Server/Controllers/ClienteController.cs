@@ -20,15 +20,11 @@ namespace ProvaCode7.Server
 
         private readonly AppDbContext _context;
         private IMapper _mapper;
-        public ClienteController(AppDbContext context, , IMapper mapper)
+        public ClienteController(AppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
-
-
-
-
 
         [HttpGet("PegaLista")]
         public async Task<ActionResult<List<ClienteListModelView>>> PegaLista()
@@ -49,6 +45,30 @@ namespace ProvaCode7.Server
                 return BadRequest(new RetornoRequisicao { Mensagem = ex.Message, Sucesso = false });
             }
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult<ClienteViewModel>> Get([FromQuery] int idCliente)
+        {
+            try
+            {
+                //AsNoTracking busca mais rapida
+                var cliente = _context.Cliente.FirstOrDefault(x => x.Id == idCliente);
+                var endereco = _context.Endereco.FirstOrDefault(x => x.Id == cliente.IdEndereco);
+                ClienteViewModel viewModel = new ClienteViewModel();
+
+                //O MAPER PASSA A ENTIDADE PARA MODEL SEM A NECESSIDADE DE PASSAR VIA FOREACH
+               viewModel = _mapper.Map<ClienteViewModel>(cliente);
+
+
+                return Ok(_mapper.Map<ClienteViewModel>(cliente));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new RetornoRequisicao { Mensagem = ex.Message, Sucesso = false });
+            }
+        }
+
 
         [HttpPost]
         public async Task<ActionResult<RetornoRequisicao>> Post(ClienteViewModel clienteViewModel)

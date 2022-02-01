@@ -1,0 +1,57 @@
+﻿
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Cpf</th>
+            <th scope="col">Status</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+
+        @if (Lista != null)
+        {
+            foreach (var item in Lista)
+            {
+        <tr>
+
+            <td>@item.Id</td>
+            <th scope="row">@item.Nome</th>
+            <th scope="row">@item.Cpf</th>
+            <th scope="row">@item.Status</th>     
+            <!--condição id status para ofertar-->
+            <th> <button type="button" class="btn btn-secondary" @onclick="@(()=>Ofertar.InvokeAsync(item))"> Ofertar</button></th>
+            <th> <button type="button" class="btn btn-danger" @onclick="@(()=>Ofertar.InvokeAsync(item))"> Editar</button></th>
+        </tr>
+            }
+        }
+
+        <tr>
+            <td>2</td>
+            <th scope="row">ze</th>
+            <td>111..22...33...5</td>
+            <td>nome disponivel</td>
+            <th> <button class="btn btn-secondary"> Ofertar</button></th>
+            <th> <button class="btn btn-danger"> Editar</button></th>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+
+@code {
+    [Parameter]
+    public List<ClienteListModelView> Lista  { get; set; }
+
+    [Parameter]
+    public EventCallback<ClienteListModelView> Ofertar { get; set; }
+
+    [Parameter]
+    public EventCallback<ClienteListModelView> Editar { get; set; }
+}

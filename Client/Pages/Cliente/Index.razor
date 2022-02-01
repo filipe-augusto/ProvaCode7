@@ -1,0 +1,84 @@
+﻿@page "/ListaClientes"
+@inject HttpClient http
+@inject NavigationManager nav
+
+
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+            <li class="breadcrumb-item"><span>Clientes</span></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class=" card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-9">
+
+                            CLIENTES
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-success" @onclick="CadastrarNovo"> Novo Cliente</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Listacliente != null)
+                    {
+
+                        <TabelaCliente Lista="Listacliente"></TabelaCliente>
+                    }
+                    else
+                    {
+                        <h5> Nenhum cliente disponivel no momento</h5>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+@code {
+
+    List<ClienteListModelView> Listacliente = new List<ClienteListModelView>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregaLista();
+    }
+
+    async Task CarregaLista()
+    {
+        var httpResponse = await http.GetAsync($"api/Cliente/PegaLista");
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+
+            Listacliente = JsonSerializer.Deserialize<List<ClienteListModelView>>(responseString,
+new JsonSerializerOptions()
+{
+    PropertyNameCaseInsensitive = true
+});
+
+        }
+
+    }
+
+    void CadastrarNovo()
+    {
+        nav.NavigateTo("ListaClientes/NovoCliente");
+    }
+
+}
