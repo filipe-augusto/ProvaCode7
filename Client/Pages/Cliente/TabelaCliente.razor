@@ -24,8 +24,9 @@
             <th scope="row">@item.Cpf</th>
             <th scope="row">@item.Status</th>     
             <!--condição id status para ofertar-->
-            <th> <button type="button" class="btn btn-secondary" @onclick="@(()=>Ofertar.InvokeAsync(item))"> Ofertar</button></th>
-            <th> <button type="button" class="btn btn-danger" @onclick="@(()=>Ofertar.InvokeAsync(item))"> Editar</button></th>
+            <th> <button type="button" class="btn btn-secondary float-right" @onclick="@(()=>Ofertar.InvokeAsync(item))"> Ofertar</button></th>
+            <th> <button type="button" class="btn btn-danger float-right"
+                         @onclick="@(()=> navigation.NavigateTo($"/ListaClientes/EditarCliente/{item.IdClienteCifrado}"))"> Editar</button></th>
         </tr>
             }
         }
@@ -45,6 +46,10 @@
     [Parameter]
     public EventCallback<ClienteListModelView> Ofertar { get; set; }
 
-    [Parameter]
-    public EventCallback<ClienteListModelView> Editar { get; set; }
+
+
+    [Inject]
+    public NavigationManager navigation { get; set; }
+
+
 }

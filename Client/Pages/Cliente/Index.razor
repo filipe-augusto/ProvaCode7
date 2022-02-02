@@ -3,6 +3,7 @@
 @inject NavigationManager nav
 
 
+
 <div class="pcoded-main-container">
     <div class="pcoded-content">
         <ul class="breadcrumb">
@@ -19,7 +20,7 @@
 
                             CLIENTES
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-3 text-right">
                             <button class="btn btn-success" @onclick="CadastrarNovo"> Novo Cliente</button>
                         </div>
                     </div>
@@ -56,6 +57,11 @@
     protected override async Task OnInitializedAsync()
     {
         await CarregaLista();
+
+        foreach (var item in Listacliente)
+        {
+            Listacliente.FirstOrDefault(x => x.Id == item.Id).IdClienteCifrado = (item.Id * 10) + "1N33D70p4557h!57e57";
+        }
     }
 
     async Task CarregaLista()
@@ -76,9 +82,14 @@ new JsonSerializerOptions()
 
     }
 
+
+
+
     void CadastrarNovo()
     {
         nav.NavigateTo("ListaClientes/NovoCliente");
     }
+
+
 
 }

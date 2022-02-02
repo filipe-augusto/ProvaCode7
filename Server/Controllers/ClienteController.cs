@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+//using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using ProvaCode7.Models;
 using ProvaCode7.Shared;
 using ProvaCode7.Shared.Entities;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+//using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,8 +49,8 @@ namespace ProvaCode7.Server
         }
 
 
-        [HttpGet]
-        public async Task<ActionResult<ClienteViewModel>> Get([FromQuery] int idCliente)
+        [HttpGet("{idCliente}")]
+        public async Task<ActionResult<ClienteViewModel>> Get(int idCliente)
         {
             try
             {
@@ -58,7 +60,7 @@ namespace ProvaCode7.Server
                 ClienteViewModel viewModel = new ClienteViewModel();
 
                 //O MAPER PASSA A ENTIDADE PARA MODEL SEM A NECESSIDADE DE PASSAR VIA FOREACH
-               viewModel = _mapper.Map<ClienteViewModel>(cliente);
+                viewModel = _mapper.Map<ClienteViewModel>(cliente);
 
 
                 return Ok(_mapper.Map<ClienteViewModel>(cliente));
@@ -69,6 +71,35 @@ namespace ProvaCode7.Server
             }
         }
 
+
+        [HttpPut]
+        public async Task<ActionResult<RetornoRequisicao>> Put(ClienteViewModel clienteViewModel)
+        {
+            try
+            {
+                using (IDbContextTransaction dbContextTransaction = _context.Database.BeginTransaction())
+                {
+                    var registroCliente = _context.Cliente.FirstOrDefault(x => x.Id == clienteViewModel.Id);
+                    registroCliente.Nome = clienteViewModel.Nome;
+                    registroCliente.Cpf = clienteViewModel.Cpf;
+                    registroCliente.Telefone = clienteViewModel.Telefone;
+                    Endereco endereco = _mapper.Map<Endereco>(clienteViewModel.Endereco);
+                    _context.Entry(endereco).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
+                    _context.Entry(registroCliente).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
+                    await dbContextTransaction.CommitAsync();
+                    return Ok(new RetornoRequisicao { Sucesso = true, Mensagem = "Registro alterado com sucesso" });
+                }
+
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new RetornoRequisicao() { Mensagem = ex.Message, Sucesso = false });
+            }
+        }
 
         [HttpPost]
         public async Task<ActionResult<RetornoRequisicao>> Post(ClienteViewModel clienteViewModel)
@@ -81,14 +112,19 @@ namespace ProvaCode7.Server
                     Cliente cliente = new Cliente();
                     Endereco endereco = new Endereco();
                     cliente = _mapper.Map<Cliente>(clienteViewModel);
+                    // cliente.Cpf = clienteViewModel.Cpf
+
+
                     endereco = _mapper.Map<Endereco>(clienteViewModel.Endereco);
 
                     try
                     {
+
                         await _context.AddAsync(endereco);
                         await _context.SaveChangesAsync();
 
                         cliente.IdEndereco = endereco.Id;
+                        cliente.Credito = 5;
                         await _context.AddAsync(cliente);
                         await _context.SaveChangesAsync();
 

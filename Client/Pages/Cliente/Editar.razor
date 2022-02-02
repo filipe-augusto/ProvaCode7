@@ -1,4 +1,4 @@
-﻿@page "/ListaClientes/NovoCliente"
+﻿@page "/ListaClientes/EditarCliente/{IdCliente}"
 @inject HttpClient http
 @inject NavigationManager navigation
 <div class="pcoded-main-container">
@@ -6,7 +6,7 @@
         <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Inicio</a></li>
             <li class="breadcrumb-item"><a href="/ListaClientes">Clientes</a></li>
-            <li class="breadcrumb-item"><span>Novo</span></li>
+            <li class="breadcrumb-item"><span>Editar</span></li>
         </ul>
     </div>
     <div class="row">
@@ -15,7 +15,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12">
-                            Novo Cliente
+                            Editar Cliente
                         </div>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                     </div>
                     @if (viewModel != null)
                     {
-                        <FomularioClienteForm ViewModel="viewModel" OnValidSubmit="Criar" SubmitForm="submit" TextoBotao="Criar"> </FomularioClienteForm>
+                        <FomularioClienteForm ViewModel="viewModel" OnValidSubmit="EditarCliente" SubmitForm="submit" TextoBotao="Editar"> </FomularioClienteForm>
                     }
                 </div>
             </div>
@@ -39,6 +39,8 @@
 
 
 @code {
+    [Parameter]
+    public string IdCliente { get; set; }
     ClienteViewModel viewModel;// = new ClienteViewModel();
     bool submit = false;
     #region conf mensagem
@@ -50,27 +52,48 @@
 
     protected override async Task OnInitializedAsync()
     {
-        viewModel = new ClienteViewModel();
-        viewModel.Endereco = new EnderecoViewModel();
+        IdCliente = IdCliente.Replace("1N33D70p4557h!57e57","");
+        decimal id = Convert.ToDecimal(IdCliente) / 10;
+
+        IdCliente = id.ToString();
+        Console.WriteLine(IdCliente);
+
+        await CarregaModel();
+
+
     }
 
 
-    async Task Criar()
+    async Task CarregaModel()
+    {
+        try
+        {
+
+            int id = Convert.ToInt32(IdCliente);
+            viewModel = await http.GetFromJsonAsync<ClienteViewModel>($"api/Cliente/{id}");
+        }
+        catch (Exception ex)
+        {
+            await ChamaMensagem("Erro para carregar os dados do cliente!", "danger", 10);
+        }
+    }
+
+    async Task EditarCliente()
     {
         try
         {
             submit = true;
-            var httpResponse = await http.PostAsJsonAsync("api/Cliente", viewModel);
+            var httpResponse = await http.PutAsJsonAsync("api/Cliente", viewModel);
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                await  ChamaMensagem("Cliente Criado com sucesso!", "success", 2);
+                await ChamaMensagem("Alterado com sucesso!", "success", 4);
                 navigation.NavigateTo("/ListaClientes");
             }
         }
-        catch
+        catch (Exception ex)
         {
-            await ChamaMensagem("Erro para criar o cliente.", "danger",2);
+            await ChamaMensagem("Erro para editar o cliente.", "danger", 10);
         }
         finally
         {
@@ -83,7 +106,7 @@
         _mensagem = mensagem;
         _tipoMensagem = tipomensagem;
         _exibir = true;
-        await  Task.Delay(quantidadeSegundos * 1000);
+        await Task.Delay(quantidadeSegundos * 1000);
         _exibir = false;
     }
 
