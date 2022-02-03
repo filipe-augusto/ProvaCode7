@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace ProvaCode7.Models
+namespace ProvaCode7.Shared
 {
     public class CategoriaProduto : Base
     {

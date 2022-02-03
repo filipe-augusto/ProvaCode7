@@ -1,6 +1,5 @@
-﻿using ProvaCode7.Models;
-using Microsoft.EntityFrameworkCore;
-
+﻿using Microsoft.EntityFrameworkCore;
+using ProvaCode7.Shared;
 
 namespace ProvaCode7.Server
 {
@@ -11,6 +10,8 @@ namespace ProvaCode7.Server
         public DbSet<Produto> Produto { get; set; }
         public DbSet<Endereco> Endereco { get; set; }
         public DbSet<CategoriaProduto> CategoriaProduto { get; set; }
+        public DbSet<StatusCliente> StatusCliente { get; set; }
+
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -32,7 +33,13 @@ namespace ProvaCode7.Server
             .WithOne(e => e.Cliente)
             .HasForeignKey<Cliente>(x => x.IdEndereco)
             .HasConstraintName("ForeignKey_Cliente_Endereco");
-         
+            //1 para muitos
+            modelBuilder.Entity<Cliente>()
+            .HasOne(c => c.StatusCliente)
+            .WithMany(e => e.Clientes)
+            .HasForeignKey(x => x.IdStatus)
+            .HasConstraintName("ForeignKey_Cliente_StatusCliente");
+
             modelBuilder.Entity<Cliente>()
           .Property(p => p.IsAtivo).ValueGeneratedNever()
           .HasDefaultValue(true);
@@ -66,7 +73,11 @@ namespace ProvaCode7.Server
             .Property(p => p.IsAtivo).ValueGeneratedNever()
             .HasDefaultValue(true);
 
+
+
             #endregion
+
+           
         }
 
 

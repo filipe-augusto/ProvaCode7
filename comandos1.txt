@@ -2,3 +2,4 @@
  dotnet-ef database update
  dotnet-ef migrations add CriacaoInicial
 dotnet watch run
+dotnet tool install --global dotnet-ef --version 3.0.0

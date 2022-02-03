@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ProvaCode7.Shared.Entities
+namespace ProvaCode7.Shared
 {
     public class RetornoRequisicao
     {

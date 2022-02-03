@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProvaCode7.Models
+namespace ProvaCode7.Shared
 {
     public class Cliente  : Base
     {
@@ -20,6 +16,8 @@ namespace ProvaCode7.Models
         public decimal Credito { get; set; }
 
         public byte IdStatus { get; set; }
+
+        public StatusCliente StatusCliente { get; set; }
 
         public int IdEndereco { get; set; }
 
