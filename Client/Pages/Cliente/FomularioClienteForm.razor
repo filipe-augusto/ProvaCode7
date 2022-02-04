@@ -1,142 +1,245 @@
 ﻿@if (ViewModel != null)
 {
 
-    <EditForm Model="@ViewModel" OnValidSubmit="@OnValidSubmit" class="form-horizontal">
-        <DataAnnotationsValidator />
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-4">
-                        <div class="form-group">
-                            <label class="form-label" form="Name">Nome: </label>
-                            <InputText @bind-Value="ViewModel.Nome" type="text" class="form-control" />
-                            <ValidationMessage For="@(()=> ViewModel.Nome)" />
-                        </div>
+<EditForm Model="@ViewModel" OnValidSubmit="@OnValidSubmit" class="form-horizontal">
+    <DataAnnotationsValidator />
+    <hr />
+    <h4 class="ml-4">Dados pessoais</h4>
+    <hr />
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Nome: </label>
+                        <InputText @bind-Value="ViewModel.Nome" type="text" class="form-control" />
+                        <ValidationMessage For="@(()=> ViewModel.Nome)" />
                     </div>
-                    <div class="col-4">
-                        <div class="form-group">
-                            <label class="form-label" form="Name">CPF: </label>
-                            <InputText @bind-Value="ViewModel.Cpf" type="text" class="form-control cpf" />
-                            <ValidationMessage For="@(()=> ViewModel.Cpf)" />
-                        </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">CPF: </label>
+                        <InputText @bind-Value="ViewModel.Cpf" type="text" class="form-control cpf" />
+                        <ValidationMessage For="@(()=> ViewModel.Cpf)" />
                     </div>
-                    <div class="col-4">
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Telefone: </label>
+                        <InputText @bind-Value="ViewModel.Telefone" type="text" class="form-control telefone" />
+                        <ValidationMessage For="@(()=> ViewModel.Telefone)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @*<div class="col-4">
                         <div class="form-group">
                             <label class="form-label" form="Name">Telefone: </label>
-                            <InputText @bind-Value="ViewModel.Telefone" type="text" class="form-control telefone" />
-                            <ValidationMessage For="@(()=> ViewModel.Telefone)" />
+                    <InputText @bind-Value="ViewModel.IdStatus" type="text" class="form-control" />
+                    <ValidationMessage For="@(()=> ViewModel.Telefone)" />
+                        </div>
+                    </div>*@
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Credito: </label>
+                        <InputNumber @bind-Value="ViewModel.Credito" type="text" class="form-control" disabled />
+                        <ValidationMessage For="@(()=> ViewModel.Credito)" />
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div class="form-group">
+                        <label class="form-label" form="Name">Status: </label>
+                        <InputText @bind-Value="ViewModel.NomeStatus" type="text" class="form-control" disabled />
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (ViewModel.Endereco != null)
+        {
+            <hr class="y-1" />
+            <h4 class="ml-4">Endereço</h4>
+            <hr class="y-1" />
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="form-label" form="Name">Cep: </label>
+                            <InputText @bind-Value="ViewModel.Endereco.Cep" type="text" class="form-control cep" />
+                            <ValidationMessage For="@(() => ViewModel.Endereco.Cep)" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label class="form-label" form="Name">Logradouro: </label>
+                            <InputText @bind-Value="ViewModel.Endereco.Logradouro" type="text" class="form-control" />
+                            <ValidationMessage For="@(() => ViewModel.Endereco.Logradouro)" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="form-label" form="Name">Numero: </label>
+                            <InputText @bind-Value="ViewModel.Endereco.Numero" type="text" class="form-control" />
+                            <ValidationMessage For="@(() => ViewModel.Endereco.Numero)" />
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    @*<div class="col-4">
-                            <div class="form-group">
-                                <label class="form-label" form="Name">Telefone: </label>
-                        <InputText @bind-Value="ViewModel.IdStatus" type="text" class="form-control" />
-                        <ValidationMessage For="@(()=> ViewModel.Telefone)" />
-                            </div>
-                        </div>*@
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="form-group">
-                            <label class="form-label" form="Name">Credito: </label>
-                            <InputNumber @bind-Value="ViewModel.Credito" type="text" class="form-control" disabled />
-                            <ValidationMessage For="@(()=> ViewModel.Credito)" />
+                            <label class="form-label" form="Name">Bairro: </label>
+                            <InputText @bind-Value="ViewModel.Endereco.Bairro" type="text" class="form-control" />
+                            <ValidationMessage For="@(() => ViewModel.Endereco.Bairro)" />
+
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="form-label" form="Name">Cidade: </label>
+                            <InputText @bind-Value="ViewModel.Endereco.Cidade" type="text" class="form-control" />
+                            <ValidationMessage For="@(() => ViewModel.Endereco.Cidade)" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="form-label" form="Name">Estado: </label>
+                            <InputText @bind-Value="ViewModel.Endereco.Estado" type="text" class="form-control" />
+                            <ValidationMessage For="@(() => ViewModel.Endereco.Estado)" />
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label class="form-label" form="Name">Complemento: </label>
+                            <InputText @bind-Value="ViewModel.Endereco.Complemento" type="text" class="form-control" />
+                            <ValidationMessage For="@(() => ViewModel.Endereco.Complemento)" />
                         </div>
                     </div>
                 </div>
             </div>
-            @if (ViewModel.Endereco != null)
+        }
+        @if (isTelaOferta)
+        {
+            @if (ViewModel.ListProdutos != null)
             {
-
-                <hr class="y-1"/>
+                <hr class="y-1" />
+                <h4 class="ml-4">Produtos</h4>
+                <hr class="y-1" />
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label class="form-label" form="Name">Cep: </label>
-                                <InputText @bind-Value="ViewModel.Endereco.Cep" type="text" class="form-control cep" />
-                                <ValidationMessage For="@(() => ViewModel.Endereco.Cep)" />
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label class="form-label" form="Name">Logradouro: </label>
-                                <InputText @bind-Value="ViewModel.Endereco.Logradouro" type="text" class="form-control" />
-                                <ValidationMessage For="@(() => ViewModel.Endereco.Logradouro)" />
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label class="form-label" form="Name">Numero: </label>
-                                <InputText @bind-Value="ViewModel.Endereco.Numero" type="text" class="form-control" />
-                                <ValidationMessage For="@(() => ViewModel.Endereco.Numero)" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                            <div class="col-3">
-                        <div class="form-group">
-                                <label class="form-label" form="Name">Bairro: </label>
-                                <InputText @bind-Value="ViewModel.Endereco.Bairro" type="text" class="form-control" />
-                                <ValidationMessage For="@(() => ViewModel.Endereco.Bairro)" />
 
-                            </div>
-                                </div>
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label class="form-label" form="Name">Cidade: </label>
-                                <InputText @bind-Value="ViewModel.Endereco.Cidade" type="text" class="form-control" />
-                                <ValidationMessage For="@(() => ViewModel.Endereco.Cidade)" />
-                            </div>
-                            </div>
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label class="form-label" form="Name">Estado: </label>
-                                <InputText @bind-Value="ViewModel.Endereco.Estado" type="text" class="form-control" />
-                                <ValidationMessage For="@(() => ViewModel.Endereco.Estado)" />
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label class="form-label" form="Name">Complemento: </label>
-                                <InputText @bind-Value="ViewModel.Endereco.Complemento" type="text" class="form-control" />
-                                <ValidationMessage For="@(() => ViewModel.Endereco.Complemento)" />
-                            </div>
-                        </div>
-                        </div>
-                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="overflow-y: auto !important; height: 400px !important;">
 
-              
-            }
-            <div class="card-footer">
-                <div class="row">
-                    <div class="col-2 text-left">
-                        <button type="button" class="btn btn-secondary" @onclick="Voltar" disabled="@SubmitForm">Voltar</button>
-                    </div>
-                    <div class="col-6 text-center">
-                        @if (SubmitForm)
-                        {
-                            <p>Carregando...</p>
-                        }
-                    </div>
-                    <div class="col-4 text-right">
-                        <button type="submit" class="btn btn-success" disabled="@SubmitForm">@TextoBotao</button>
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Produto</th>
+                                        <th>Valor</th>
+                                        <th></th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var item in ViewModel.ListProdutos)
+                                    {
+
+                                        <tr style=" background-color:@(item.isSelect?"lightgray":"white")">
+                                            <th>@item.Id</th>
+                                            <th>@item.Descricao</th>
+                                            <th>@item.Valor.ToString("C")</th>
+                                            <th>
+                                                <button type="button" class="btn btn-secondary"
+                                                        @onclick="@(()=>AdicionarProduto.InvokeAsync(item))">
+                                                    <span class="oi oi-@(item.isSelect?"minus":"plus")" aria-hidden="true"></span>
+                                                </button>
+
+                                            </th>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+        }
 
+
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-2 text-left">
+                    <button type="button" class="btn btn-secondary" @onclick="Voltar" disabled="@SubmitForm">Voltar</button>
+                </div>
+                <div class="col-9">
+                    @if (SubmitForm)
+                    {
+
+
+                        <p>Carregando...</p>
+                    }
+                    else
+                    {
+                        @if (isTelaOferta)
+                        {
+                            <div class="row">
+                                <div class="col-4 text-right pt-2">
+                                    <p style="font-size:20px;">
+                                        @((ViewModel.Credito
+                            - (decimal)ViewModel.ListProdutos.Where(x => x.isSelect). Sum(x => x.Valor))
+                            .ToString("C"))
+                                    </p>
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        @*<label for="ListaStatus">Novo Status: </label>*@
+                                        <select @bind-value="ViewModel.IdStatus" @bind-value:event="oninput"
+                                                id="IdStatus" class="js-example-basic-single form-control">
+                                            @if (ViewModel.ListaStatus != null)
+                                            {
+                                                <option value="0" selected disabled>Selecione um novo Status</option>
+                                                @foreach (var item in ViewModel.ListaStatus)
+                                                {
+                                                    <option value="@item.IdStatus">
+                                                        @item.Descricao
+                                                    </option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+                <div class="col-1 text-right">
+                    <button type="submit" class="btn btn-success" disabled="@SubmitForm">@TextoBotao</button>
+                </div>
+            </div>
         </div>
 
+    </div>
 
-    </EditForm>
+
+</EditForm>
 }
 @code {
+
+    [Parameter]
+    public bool isTelaOferta { get; set; } = false;
 
     [Parameter]
     public ClienteViewModel ViewModel { get; set; }
 
     [Parameter]
     public EventCallback OnValidSubmit { get; set; }
+
+    [Parameter]
+    public EventCallback<ProdutoListModelView> AdicionarProduto { get; set; }
 
     [Parameter]
     public string TextoBotao { get; set; } = "Salvar";

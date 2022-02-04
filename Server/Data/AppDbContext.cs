@@ -11,7 +11,8 @@ namespace ProvaCode7.Server
         public DbSet<Endereco> Endereco { get; set; }
         public DbSet<CategoriaProduto> CategoriaProduto { get; set; }
         public DbSet<StatusCliente> StatusCliente { get; set; }
-
+        public DbSet<ProdutoOfertadoCliente> ProdutoOfertadoCliente { get; set; }
+       
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -77,7 +78,29 @@ namespace ProvaCode7.Server
 
             #endregion
 
-           
+            #region ProdutoOfertado
+
+            modelBuilder.Entity<ProdutoOfertadoCliente>()
+            .Property(p => p.Id)
+            .IsRequired()
+            .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<ProdutoOfertadoCliente>()
+            .HasOne(c => c.Cliente)
+            .WithMany(e => e.ProdutoOfertadoCliente)
+            .HasForeignKey(x => x.IdCliente)
+            .HasConstraintName("ForeignKey_ProdutoOfertadoCliente_Cliente");
+
+            modelBuilder.Entity<ProdutoOfertadoCliente>()
+            .HasOne(c => c.Produto)
+            .WithMany(e => e.ProdutoOfertadoCliente)
+            .HasForeignKey(x => x.IdProduto)
+            .HasConstraintName("ForeignKey_ProdutoOfertadoCliente_Produto");
+
+
+            #endregion
+
+
         }
 
 

@@ -1,13 +1,10 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProvaCode7.Shared;
-using System.Linq;
 
 namespace ProvaCode7.Server
 {
@@ -29,7 +26,6 @@ namespace ProvaCode7.Server
             services.AddRazorPages();
             services.AddDbContext<AppDbContext>();
 
-
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Cliente, ClienteViewModel>();
@@ -42,10 +38,16 @@ namespace ProvaCode7.Server
                 cfg.CreateMap<Endereco, EnderecoViewModel>();
                 cfg.CreateMap<EnderecoViewModel, Endereco>();
 
+
+                cfg.CreateMap<Produto, ProdutoListModelView>();
+                cfg.CreateMap<ProdutoListModelView, Produto>();
+
+                cfg.CreateMap<StatusCliente, StatusClienteListModelView>();
+                cfg.CreateMap<StatusClienteListModelView, StatusCliente>();
+
             });
 
-
-                IMapper mapper = config.CreateMapper();
+            IMapper mapper = config.CreateMapper();
 
             services.AddSingleton(mapper);
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProvaCode7.Shared
 {
@@ -22,5 +23,7 @@ namespace ProvaCode7.Shared
         public int IdEndereco { get; set; }
 
         public Endereco Endereco { get; set; }
+
+        public List<ProdutoOfertadoCliente> ProdutoOfertadoCliente { get; set; }
     }
 }

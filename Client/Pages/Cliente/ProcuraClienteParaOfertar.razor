@@ -1,0 +1,180 @@
+﻿@page "/Ofertar"
+@inject HttpClient http
+@inject NavigationManager nav
+
+
+<style>
+    .hoverSpan:hover {
+        text-decoration: blink;
+        text-decoration: underline;
+        text-decoration-color: initial
+    }
+</style>
+
+<div class="pcoded-main-container">
+    <div class="pcoded-content">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+            <li class="breadcrumb-item"><span>Tela de oferta</span></li>
+        </ul>
+
+        <div class="row">
+            <div class="col-12">
+                <div class=" card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                OFERTAR PRODUTOS
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <BlazoredTypeahead SearchMethod="ProcuraArtigos" @bind-Value="ClienteSelecionado">
+                                    <SelectedTemplate>
+                                        @context.Nome
+                                    </SelectedTemplate>
+                                    <ResultTemplate>
+
+                                        <span @onclick="@(()=>Ofertar(context.Id))" class="hoverSpan">
+                                            @context.Nome <strong> CPF:  @context.Cpf </strong>
+                                        </span>
+
+                                    </ResultTemplate>
+                                </BlazoredTypeahead>
+
+                            </div>
+                        </div>
+                    </div>
+             
+                    <Mensagem Texto="@_mensagem" TipoMensagem="@_tipoMensagem" Exibir="_exibir" ></Mensagem>
+                    <!--DADOSCLIENTE-->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                @if (DadosCompletoCliente != null)
+                                {
+                                    @if (DadosCompletoCliente.Nome != null)
+                                    {
+                                        <FomularioClienteForm ViewModel="DadosCompletoCliente" SubmitForm="submitForm" TextoBotao="Atualizar"
+                                                              isTelaOferta="@true" AdicionarProduto="AdicionarProdutoMetodo"> </FomularioClienteForm>
+                                    }
+                                    else
+                                    {
+                                        <p>Não encontrado.</p>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    ClienteListModelView ClienteSelecionado;
+    List<ClienteListModelView> clientes = new List<ClienteListModelView>();
+    ClienteViewModel DadosCompletoCliente;
+    bool submitForm = false;
+    protected override void OnInitialized()
+    {
+        ClienteSelecionado = new ClienteListModelView();
+    }
+
+    private async Task<IEnumerable<ClienteListModelView>> ProcuraArtigos(string criterio)
+    {
+
+
+        submitForm = true;
+
+        var httpResponse = await http.GetAsync($"api/Cliente/BuscaCliente?palavra={criterio}");
+
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+
+            clientes = JsonSerializer.Deserialize<List<ClienteListModelView>>
+            (responseString,
+            new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+        }
+
+        submitForm = false;
+        return clientes;
+
+    }
+
+
+    async Task Ofertar(int idCliente)
+    {
+        try
+        {
+
+            DadosCompletoCliente = await http.GetFromJsonAsync<ClienteViewModel>($"api/Cliente/{idCliente}");
+            Console.WriteLine(DadosCompletoCliente.Cpf);
+        }
+        catch (Exception ex)
+        {
+            await ChamaMensagem("Erro para carregar os dados do cliente!", "danger", 10);
+        }
+    }
+
+    #region conf mensagem
+    string _mensagem = "";
+    string _tipoMensagem = "";
+    bool _exibir;
+    #endregion
+
+
+    async Task ChamaMensagem(string mensagem, string tipomensagem, int quantidadeSegundos)
+    {
+        _mensagem = mensagem;
+        _tipoMensagem = tipomensagem;
+        _exibir = true;
+        await Task.Delay(quantidadeSegundos * 1000);
+        _exibir = false;
+    }
+
+    void AdicionarProdutoMetodo(ProdutoListModelView produto)
+    {
+        DadosCompletoCliente.ListProdutos.Find(x => x == produto).isSelect =
+            !DadosCompletoCliente.ListProdutos.Find(x => x == produto).isSelect;
+    }
+
+    async Task AtualizarDadosCliente()
+    {
+        try
+        {
+            submitForm = true;
+            DadosCompletoCliente.isTelaOfertar = true;
+                var httpResponse = await http.PutAsJsonAsync("api/Cliente", DadosCompletoCliente);
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                await ChamaMensagem("Alterado com sucesso!", "success", 4);
+                nav.NavigateTo("/ListaClientes");
+            }
+        }
+        catch (Exception ex)
+        {
+            await ChamaMensagem("Erro para editar o cliente.", "danger", 10);
+        }
+        finally
+        {
+            submitForm = false;
+        }
+    }
+
+
+
+
+}

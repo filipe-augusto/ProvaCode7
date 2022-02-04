@@ -1,4 +1,6 @@
-﻿namespace ProvaCode7.Shared
+﻿using System.Collections.Generic;
+
+namespace ProvaCode7.Shared
 {
     public class Produto : Base
     {
@@ -10,7 +12,7 @@
 
         public virtual CategoriaProduto CategoriaProduto { get; set; }
 
-
+        public List<ProdutoOfertadoCliente> ProdutoOfertadoCliente { get; set; }
 
     }
 }

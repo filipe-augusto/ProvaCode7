@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ProvaCode7.Shared
 {
@@ -21,9 +22,16 @@ namespace ProvaCode7.Shared
 
         public byte IdStatus { get; set; }
 
+        public string NomeStatus { get; set; }
+
         public int IdEndereco { get; set; }
 
+        public bool isTelaOfertar { get; set; } = false;
+
         public EnderecoViewModel Endereco { get; set; }
+        public List<ProdutoListModelView> ListProdutos { get; set; }
+
+        public List<StatusClienteListModelView> ListaStatus { get; set; }
 
     }
 }

@@ -38,7 +38,15 @@ namespace ProvaCode7.Server
                 //O MAPER PASSA A ENTIDADE PARA MODEL SEM A NECESSIDADE DE PASSAR VIA FOREACH
                 ListaClientesModel = _mapper.Map<List<ClienteListModelView>>(listaClientes);
 
-                return Ok(_mapper.Map<List<ClienteListModelView>>(listaClientes));
+
+                //pegar  o nome do status
+                foreach (var item in ListaClientesModel)
+                {
+                    ListaClientesModel.First(x => x.Id == item.Id).Status =  RetornaStatusPorId(item.IdStatus);
+                }
+
+
+                return Ok(_mapper.Map<List<ClienteListModelView>>(ListaClientesModel));
             }
             catch (Exception ex)
             {
@@ -55,13 +63,20 @@ namespace ProvaCode7.Server
                 //AsNoTracking busca mais rapida
                 var cliente = _context.Cliente.FirstOrDefault(x => x.Id == idCliente);
                 var endereco = _context.Endereco.FirstOrDefault(x => x.Id == cliente.IdEndereco);
+                var listaProdutos = _context.Produto.AsNoTracking().ToList();
+                var listaStatus = _context.StatusCliente.AsNoTracking().ToList();
+              
                 ClienteViewModel viewModel = new ClienteViewModel();
-
-                //O MAPER PASSA A ENTIDADE PARA MODEL SEM A NECESSIDADE DE PASSAR VIA FOREACH
+                viewModel.ListProdutos = new List<ProdutoListModelView>();
+                viewModel.ListaStatus = new List<StatusClienteListModelView>();
                 viewModel = _mapper.Map<ClienteViewModel>(cliente);
+                viewModel.ListProdutos = _mapper.Map<List<ProdutoListModelView>>(listaProdutos);
+                viewModel.Endereco = _mapper.Map<EnderecoViewModel>(endereco);
+                //O MAPER PASSA A ENTIDADE PARA MODEL SEM A NECESSIDADE DE PASSAR VIA FOREACH
+                viewModel.NomeStatus = RetornaStatusPorId(viewModel.IdStatus);
+                viewModel.ListaStatus = _mapper.Map<List<StatusClienteListModelView>>(listaStatus);
 
-
-                return Ok(_mapper.Map<ClienteViewModel>(cliente));
+                return Ok(viewModel);
             }
             catch (Exception ex)
             {
@@ -81,10 +96,19 @@ namespace ProvaCode7.Server
                     registroCliente.Nome = clienteViewModel.Nome;
                     registroCliente.Cpf = clienteViewModel.Cpf;
                     registroCliente.Telefone = clienteViewModel.Telefone;
-                    Endereco endereco = _mapper.Map<Endereco>(clienteViewModel.Endereco);
+
+                    #region Endereco
+                    Endereco endereco = _mapper.Map<Endereco>(clienteViewModel.Endereco); 
                     _context.Entry(endereco).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
+                    #endregion
 
+                    if (registroCliente.IdStatus == null | registroCliente.IdStatus < 1)
+                    {
+                        registroCliente.IdStatus = (byte)EnumStatus.NomeLivre;
+                    }
+
+                  
                     _context.Entry(registroCliente).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
 
@@ -93,7 +117,7 @@ namespace ProvaCode7.Server
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(new RetornoRequisicao() { Mensagem = ex.Message, Sucesso = false });
             }
@@ -113,6 +137,7 @@ namespace ProvaCode7.Server
                     // cliente.Cpf = clienteViewModel.Cpf
 
 
+
                     endereco = _mapper.Map<Endereco>(clienteViewModel.Endereco);
 
                     try
@@ -122,6 +147,7 @@ namespace ProvaCode7.Server
                         await _context.SaveChangesAsync();
 
                         cliente.IdEndereco = endereco.Id;
+                        cliente.IdStatus = (byte)EnumStatus.NomeLivre;
                         cliente.Credito = 5;
                         await _context.AddAsync(cliente);
                         await _context.SaveChangesAsync();
@@ -146,5 +172,48 @@ namespace ProvaCode7.Server
 
 
 
+
+
+
+        [HttpGet("BuscaCliente")]
+        public async Task<ActionResult<List<ClienteListModelView>>> BuscaCliente([FromQuery] string palavra)
+        {
+            List<ClienteListModelView> listaClientes = new List<ClienteListModelView>();
+
+            try
+            {
+
+           
+
+            var registroClientes = _context.Cliente
+                    .Where(x => _context.StatusCliente.Where(x => !x.IsFinalizaCliente).Select(x =>x.IdStatus).Contains(x.IdStatus)) //SE O ID TIVER NA RELAÇÃO DOS STATUS COM CLIENTE FINALIZADO
+                    .Where(x => x.Nome.ToLower().Contains(palavra.ToLower()) ||
+          x.Cpf.Replace(".", "").Replace("-", "").ToLower()
+          .Contains(palavra.Replace(".", "").Replace("-", "").ToLower())).ToList();
+                listaClientes = _mapper.Map<List<ClienteListModelView>>(registroClientes);
+
+                return Ok(listaClientes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new RetornoRequisicao { Mensagem = ex.Message, Sucesso = false });
+            }
+
+
+
+        }
+
+
+        string RetornaStatusPorId(byte id)
+        {
+            if (id == 0)
+            {
+                return "";
+            }
+            var nomeStatus = _context.StatusCliente.FirstOrDefault(x => x.IdStatus == id).Descricao;
+
+
+            return nomeStatus == null ? "" : nomeStatus;
+        }
     }
 }

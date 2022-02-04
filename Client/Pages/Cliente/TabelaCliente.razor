@@ -6,7 +6,7 @@
             <th scope="col">Nome</th>
             <th scope="col">Cpf</th>
             <th scope="col">Status</th>
-            <th></th>
+            @*<th></th>*@
             <th></th>
         </tr>
     </thead>
@@ -24,7 +24,7 @@
             <th scope="row">@item.Cpf</th>
             <th scope="row">@item.Status</th>     
             <!--condição id status para ofertar-->
-            <th> <button type="button" class="btn btn-secondary float-right" @onclick="@(()=>Ofertar.InvokeAsync(item))"> Ofertar</button></th>
+            @*<th> <button type="button" class="btn btn-secondary float-right" @onclick="@(()=>Ofertar.InvokeAsync(item))"> Ofertar</button></th>*@
             <th> <button type="button" class="btn btn-danger float-right"
                          @onclick="@(()=> navigation.NavigateTo($"/ListaClientes/EditarCliente/{item.IdClienteCifrado}"))"> Editar</button></th>
         </tr>
