@@ -9,8 +9,8 @@ using ProvaCode7.Server;
 namespace ProvaCode7.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220203191954_tabelaStatus")]
-    partial class tabelaStatus
+    [Migration("20220204005117_TabelaStatus1")]
+    partial class TabelaStatus1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
