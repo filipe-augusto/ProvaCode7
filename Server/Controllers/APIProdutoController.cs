@@ -14,11 +14,11 @@ namespace ProvaCode7.Server.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class APIController : Controller
+    public class APIProdutoController : Controller
     {
         private readonly AppDbContext _context;
         private IMapper _mapper;
-        public APIController(AppDbContext context, IMapper mapper)
+        public APIProdutoController(AppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
