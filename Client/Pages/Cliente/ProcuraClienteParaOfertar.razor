@@ -74,7 +74,8 @@
     </div>
 </div>
 
-<ModalParaTudo @ref="modal" NomeBotaoCancelar="Cancelar" NomeBotaoConfirmar="Confirmar" Titulo="Confirmar a venda?" onCancela="fechaModal" onConfirma="AtualizarDadosCliente">
+<ModalParaTudo @ref="modal" NomeBotaoCancelar="Cancelar" NomeBotaoConfirmar="Confirmar" Titulo="Confirmar a venda?"
+               onCancela="fechaModal" onConfirma="AtualizarDadosCliente" Submit="submitForm">
     @if (DadosCompletoCliente != null)
     {
 

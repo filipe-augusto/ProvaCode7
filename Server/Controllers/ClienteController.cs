@@ -260,15 +260,10 @@ namespace ProvaCode7.Server
                     Cliente cliente = new Cliente();
                     Endereco endereco = new Endereco();
                     cliente = _mapper.Map<Cliente>(clienteViewModel);
-                    // cliente.Cpf = clienteViewModel.Cpf
-
-
-
                     endereco = _mapper.Map<Endereco>(clienteViewModel.Endereco);
 
                     try
                     {
-
                         await _context.AddAsync(endereco);
                         await _context.SaveChangesAsync();
 
