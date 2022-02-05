@@ -24,7 +24,8 @@ namespace ProvaCode7.Server.Controllers
             _mapper = mapper;
         }
         [HttpGet("BuscaVendasPorCpf")]
-        public async Task<JsonResult> BuscaVendasPorCpf([FromQuery] string cpf)
+       // public async Task<JsonResult> BuscaVendasPorCpf([FromQuery] string cpf)
+        public async Task<ActionResult<APIConsultaDeVendasViaCliente>> BuscaVendasPorCpf([FromQuery] string cpf)
         {
             try
             {
@@ -62,7 +63,8 @@ namespace ProvaCode7.Server.Controllers
         }
 
         [HttpGet("BuscaVendasPorNomeProduto")]
-        public async Task<JsonResult> BuscaVendasPorNomeProduto([FromQuery] string nomeProduto)
+        //public async Task<JsonResult> BuscaVendasPorNomeProduto([FromQuery] string nomeProduto)
+        public async Task<ActionResult<APIConsultaDeVendasViaCliente>> BuscaVendasPorNomeProduto([FromQuery] string nomeProduto)
         {
             try { 
               
@@ -101,7 +103,8 @@ namespace ProvaCode7.Server.Controllers
 
 
         [HttpPost]
-        public async Task<JsonResult> Post(InsereProdutoPost produto)
+        public async Task<ActionResult<RetornoRequisicao>> Post(InsereProdutoPost produto)
+     //   public async Task<JsonResult> Post(InsereProdutoPost produto)
         {
 
             //IDTipoSoftware vem atraves de um select do tipo byte
