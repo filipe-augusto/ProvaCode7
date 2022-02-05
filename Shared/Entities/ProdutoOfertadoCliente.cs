@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,6 +15,9 @@ namespace ProvaCode7.Shared
 
         public int IdProduto { get; set; }
         public Produto Produto { get; set; }
+
+        public int IdRegistroAtendimento { get; set; }
+        public RegistroAtendimentos RegistroAtendimentos { get; set; }
 
         public DateTime DiaDaOferta { get; set; }
     }

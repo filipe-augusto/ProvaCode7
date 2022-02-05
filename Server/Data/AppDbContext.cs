@@ -12,7 +12,7 @@ namespace ProvaCode7.Server
         public DbSet<CategoriaProduto> CategoriaProduto { get; set; }
         public DbSet<StatusCliente> StatusCliente { get; set; }
         public DbSet<ProdutoOfertadoCliente> ProdutoOfertadoCliente { get; set; }
-       
+        public DbSet<RegistroAtendimentos> RegistroAtendimentos { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
@@ -92,6 +92,15 @@ namespace ProvaCode7.Server
             .HasConstraintName("ForeignKey_ProdutoOfertadoCliente_Cliente");
 
             modelBuilder.Entity<ProdutoOfertadoCliente>()
+          .HasOne(c => c.RegistroAtendimentos)
+          .WithMany(e => e.ProdutoOfertadoCliente)
+          .HasForeignKey(x => x.IdRegistroAtendimento)
+          .HasConstraintName("ForeignKey_ProdutoOfertadoCliente_RegistroAtendimentos");
+
+          
+
+
+            modelBuilder.Entity<ProdutoOfertadoCliente>()
             .HasOne(c => c.Produto)
             .WithMany(e => e.ProdutoOfertadoCliente)
             .HasForeignKey(x => x.IdProduto)
@@ -100,7 +109,20 @@ namespace ProvaCode7.Server
 
             #endregion
 
+            #region RegistroAtendimentos
+            modelBuilder.Entity<RegistroAtendimentos>()
+             .Property(p => p.Id)
+            .ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<RegistroAtendimentos>()
+            .HasOne(c => c.Cliente)
+            .WithMany(e => e.RegistroAtendimentos)
+            .HasForeignKey(x => x.IdCliente)
+            .HasConstraintName("ForeignKey_RegistroAtendimentoso_Cliente");
+
+
+
+            #endregion
         }
 
 

@@ -22,24 +22,17 @@
             <div class="col-12">
                 <div class=" card">
                     <div class="card-header">
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                OFERTAR PRODUTOS
-                            </div>
 
-                        </div>
-                    </div>
-                    <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
-
+                                <label>Digite o nome ou CPF</label>
                                 <BlazoredTypeahead SearchMethod="ProcuraArtigos" @bind-Value="ClienteSelecionado">
                                     <SelectedTemplate>
                                         @context.Nome
                                     </SelectedTemplate>
                                     <ResultTemplate>
 
-                                        <span @onclick="@(()=>Ofertar(context.Id))" class="hoverSpan">
+                                        <span @onclick="@(()=>BuscaCliente(context.Id))" class="hoverSpan">
                                             @context.Nome <strong> CPF:  @context.Cpf </strong>
                                         </span>
 
@@ -47,10 +40,12 @@
                                 </BlazoredTypeahead>
 
                             </div>
+
+
                         </div>
                     </div>
-             
-                    <Mensagem Texto="@_mensagem" TipoMensagem="@_tipoMensagem" Exibir="_exibir" ></Mensagem>
+
+                    <Mensagem Texto="@_mensagem" TipoMensagem="@_tipoMensagem" Exibir="_exibir"></Mensagem>
                     <!--DADOSCLIENTE-->
                     <div class="card-body">
                         <div class="row">
@@ -58,10 +53,11 @@
 
                                 @if (DadosCompletoCliente != null)
                                 {
+
                                     @if (DadosCompletoCliente.Nome != null)
                                     {
                                         <FomularioClienteForm ViewModel="DadosCompletoCliente" SubmitForm="submitForm" TextoBotao="Atualizar"
-                                                              isTelaOferta="@true" AdicionarProduto="AdicionarProdutoMetodo"> </FomularioClienteForm>
+                                                              isTelaOferta="@true" AdicionarProduto="AdicionarProdutoMetodo" OnValidSubmit="ValidarOferta"> </FomularioClienteForm>
                                     }
                                     else
                                     {
@@ -78,11 +74,100 @@
     </div>
 </div>
 
+<ModalParaTudo @ref="modal" NomeBotaoCancelar="Cancelar" NomeBotaoConfirmar="Confirmar" Titulo="Confirmar a venda?" onCancela="fechaModal" onConfirma="AtualizarDadosCliente">
+    @if (DadosCompletoCliente != null)
+    {
+
+        switch (DadosCompletoCliente.IdStatus)
+        {
+            case (byte)EnumStatus.ClienteACeitouOferta:
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="form-label" form="Name">Confirme o CPF: </label>
+                            <input @bind="DadosCompletoCliente.Cpf" type="text" class="form-control" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h2>Credito Atual:  <b>@((DadosCompletoCliente.Credito - (decimal)DadosCompletoCliente.ListProdutos.Where(x => x.isSelect).Sum(x => x.Valor)).ToString("C")) </b></h2>
+                        @if (DadosCompletoCliente.Credito - (decimal)DadosCompletoCliente.ListProdutos.Where(x => x.isSelect).Sum(x => x.Valor) > 20)
+                        {
+                            <h4 class="text-danger"> <span class="oi oi-dollar"></span>Cliente ainda possui credito para resgatar mais produtos.</h4>
+                        }
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        @if (DadosCompletoCliente.ListProdutos != null)
+                        {
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in DadosCompletoCliente.ListProdutos.Where(z => z.isSelect))
+                                    {
+                                        <tr>
+                                            <td>@item.Descricao</td>
+                                            <td>@item.Valor.ToString("C")</td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <th>Total</th>
+                                        <th> @DadosCompletoCliente.ListProdutos.Where(z => z.isSelect).Sum(x => x.Valor).ToString("C")</th>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                        }
+                    </div>
+                </div>
+                break;
+
+            case (byte)EnumStatus.NaoDesejaSerContado:
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Confirma que o cliente não deseja ser contado?</p>
+                    </div>
+                </div>
+                break;
+
+            case (byte)EnumStatus.CaiuAligacao:
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Confirma que a ligação caiu? </p>
+                    </div>
+                </div>
+                break;
+            case (byte)EnumStatus.Viajou:
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Confirma que o cliente viajou? </p>
+                    </div>
+                </div>
+                break;
+            case (byte)EnumStatus.Falecido:
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>Confirma que o cliente faleceu? </p>
+                    </div>
+                </div>
+                break;
+        }
+    }
+</ModalParaTudo>
+
 @code {
 
     ClienteListModelView ClienteSelecionado;
     List<ClienteListModelView> clientes = new List<ClienteListModelView>();
     ClienteViewModel DadosCompletoCliente;
+    ModalParaTudo modal;
     bool submitForm = false;
     protected override void OnInitialized()
     {
@@ -115,7 +200,7 @@
     }
 
 
-    async Task Ofertar(int idCliente)
+    async Task BuscaCliente(int idCliente)
     {
         try
         {
@@ -129,6 +214,88 @@
         }
     }
 
+
+
+    void AdicionarProdutoMetodo(ProdutoListModelView produto)
+    {
+        DadosCompletoCliente.ListProdutos.Find(x => x == produto).isSelect =
+            !DadosCompletoCliente.ListProdutos.Find(x => x == produto).isSelect;
+
+        if (DadosCompletoCliente.ListProdutos.Count(x => x.isSelect) > 0)
+        {
+            DadosCompletoCliente.IdStatus = (byte)EnumStatus.ClienteACeitouOferta;
+        }
+        else
+        {
+            DadosCompletoCliente.IdStatus = (byte)EnumStatus.NomeLivre;
+        }
+    }
+
+
+    async Task ValidarOferta()
+    {
+        if (DadosCompletoCliente.IdStatus == (byte)EnumStatus.NomeLivre)
+        {
+            await ChamaMensagem("Selecione algum produto ou troque o status para continuar!", "info", 10);
+            return;
+        }
+
+        if (DadosCompletoCliente.IdStatus == (byte)EnumStatus.ClienteACeitouOferta)
+        {
+            if (DadosCompletoCliente.Credito - (decimal)DadosCompletoCliente.ListProdutos.Where(x => x.isSelect).Sum(x => x.Valor) < 0)
+            {
+                await ChamaMensagem("Valor dos produtos ultrapassou o limite do crédito!", "danger", 10);
+                return;
+            }
+
+            if (DadosCompletoCliente.ListProdutos.Where(x => x.isSelect).Count() == 0)
+            {
+                await ChamaMensagem("Nenhum produto selecionado!", "danger", 10);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(DadosCompletoCliente.Cpf))
+            {
+                await ChamaMensagem("Necessario digitar um cpf!", "danger", 10);
+            }
+
+        }
+
+
+        modal.Exibir();
+    }
+
+    void fechaModal()
+    {
+        modal.Ocultar();
+    }
+
+    async Task AtualizarDadosCliente()
+    {
+        try
+        {
+            submitForm = true;
+            DadosCompletoCliente.isTelaOfertar = true;
+            var httpResponse = await http.PutAsJsonAsync("api/Cliente/AlteracaoOferta", DadosCompletoCliente);
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                modal.Ocultar();
+                await ChamaMensagem("Alterado com sucesso!", "success", 4);
+                nav.NavigateTo("/ListaClientes");
+            }
+        }
+        catch (Exception ex)
+        {
+            await ChamaMensagem("Erro para editar o cliente.", "danger", 10);
+        }
+        finally
+        {
+            submitForm = false;
+            modal.Ocultar();
+        }
+    }
+
+    #region Mensagem
     #region conf mensagem
     string _mensagem = "";
     string _tipoMensagem = "";
@@ -141,40 +308,10 @@
         _mensagem = mensagem;
         _tipoMensagem = tipomensagem;
         _exibir = true;
-        await Task.Delay(quantidadeSegundos * 1000);
+        await Task.Delay(1000* quantidadeSegundos);
         _exibir = false;
     }
-
-    void AdicionarProdutoMetodo(ProdutoListModelView produto)
-    {
-        DadosCompletoCliente.ListProdutos.Find(x => x == produto).isSelect =
-            !DadosCompletoCliente.ListProdutos.Find(x => x == produto).isSelect;
-    }
-
-    async Task AtualizarDadosCliente()
-    {
-        try
-        {
-            submitForm = true;
-            DadosCompletoCliente.isTelaOfertar = true;
-                var httpResponse = await http.PutAsJsonAsync("api/Cliente", DadosCompletoCliente);
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                await ChamaMensagem("Alterado com sucesso!", "success", 4);
-                nav.NavigateTo("/ListaClientes");
-            }
-        }
-        catch (Exception ex)
-        {
-            await ChamaMensagem("Erro para editar o cliente.", "danger", 10);
-        }
-        finally
-        {
-            submitForm = false;
-        }
-    }
-
-
+    #endregion
 
 
 }

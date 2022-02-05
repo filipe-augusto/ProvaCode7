@@ -25,5 +25,9 @@ namespace ProvaCode7.Shared
         public Endereco Endereco { get; set; }
 
         public List<ProdutoOfertadoCliente> ProdutoOfertadoCliente { get; set; }
+
+        public List<RegistroAtendimentos> RegistroAtendimentos { get; set; }
+
+        
     }
 }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProvaCode7.Server;
 
 namespace ProvaCode7.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220205151459_relacaoAtendimentoOferta")]
+    partial class relacaoAtendimentoOferta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,9 +195,6 @@ namespace ProvaCode7.Server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Descricao")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("IdCliente")

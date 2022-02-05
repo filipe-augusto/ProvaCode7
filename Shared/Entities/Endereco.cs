@@ -17,6 +17,8 @@ namespace ProvaCode7.Shared
       
         public string Complemento { get; set; }
 
+        public string Numero { get; set; }
+
         public virtual Cliente Cliente { get; set; }
 
     }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProvaCode7.Server;
 
 namespace ProvaCode7.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220204222204_CampoNUmero")]
+    partial class CampoNUmero
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,46 +174,13 @@ namespace ProvaCode7.Server.Migrations
                     b.Property<int>("IdProduto")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("IdRegistroAtendimento")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.HasIndex("IdCliente");
 
                     b.HasIndex("IdProduto");
 
-                    b.HasIndex("IdRegistroAtendimento");
-
                     b.ToTable("ProdutoOfertadoCliente");
-                });
-
-            modelBuilder.Entity("ProvaCode7.Shared.RegistroAtendimentos", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("DataCadastro")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Descricao")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("IdCliente")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsAtivo")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("NomeDaMaquinaOuIP")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdCliente");
-
-                    b.ToTable("RegistroAtendimentos");
                 });
 
             modelBuilder.Entity("ProvaCode7.Shared.StatusCliente", b =>
@@ -273,23 +242,6 @@ namespace ProvaCode7.Server.Migrations
                         .WithMany("ProdutoOfertadoCliente")
                         .HasForeignKey("IdProduto")
                         .HasConstraintName("ForeignKey_ProdutoOfertadoCliente_Produto")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProvaCode7.Shared.RegistroAtendimentos", "RegistroAtendimentos")
-                        .WithMany("ProdutoOfertadoCliente")
-                        .HasForeignKey("IdRegistroAtendimento")
-                        .HasConstraintName("ForeignKey_ProdutoOfertadoCliente_RegistroAtendimentos")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ProvaCode7.Shared.RegistroAtendimentos", b =>
-                {
-                    b.HasOne("ProvaCode7.Shared.Cliente", "Cliente")
-                        .WithMany("RegistroAtendimentos")
-                        .HasForeignKey("IdCliente")
-                        .HasConstraintName("ForeignKey_RegistroAtendimentoso_Cliente")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
