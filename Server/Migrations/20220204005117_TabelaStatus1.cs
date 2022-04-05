@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ProvaCode7.Server.Migrations
+namespace ProjetoCallCenter.Server.Migrations
 {
     public partial class TabelaStatus1 : Migration
     {

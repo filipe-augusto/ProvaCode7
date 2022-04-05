@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProvaCode7.Server
+namespace ProjetoCallCenter.Server
 {
     public class Program
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProvaCode7.Shared
+namespace ProjetoCallCenter.Shared
 {
    public class ProdutoOfertadoCliente
     {

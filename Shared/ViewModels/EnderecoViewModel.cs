@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace ProvaCode7.Shared
+namespace ProjetoCallCenter.Shared
 {
     public class EnderecoViewModel
     {

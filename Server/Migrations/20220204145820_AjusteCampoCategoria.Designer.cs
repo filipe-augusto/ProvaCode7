@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProvaCode7.Server;
+using ProjetoCallCenter.Server;
 
-namespace ProvaCode7.Server.Migrations
+namespace ProjetoCallCenter.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20220204145820_AjusteCampoCategoria")]
@@ -18,7 +18,7 @@ namespace ProvaCode7.Server.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.15");
 
-            modelBuilder.Entity("ProvaCode7.Shared.CategoriaProduto", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Shared.CategoriaProduto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,7 +41,7 @@ namespace ProvaCode7.Server.Migrations
                     b.ToTable("CategoriaProduto");
                 });
 
-            modelBuilder.Entity("ProvaCode7.Shared.Cliente", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Shared.Cliente", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +86,7 @@ namespace ProvaCode7.Server.Migrations
                     b.ToTable("Cliente");
                 });
 
-            modelBuilder.Entity("ProvaCode7.Shared.Endereco", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Shared.Endereco", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -127,7 +127,7 @@ namespace ProvaCode7.Server.Migrations
                     b.ToTable("Endereco");
                 });
 
-            modelBuilder.Entity("ProvaCode7.Shared.Produto", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Shared.Produto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -156,7 +156,7 @@ namespace ProvaCode7.Server.Migrations
                     b.ToTable("Produto");
                 });
 
-            modelBuilder.Entity("ProvaCode7.Shared.StatusCliente", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Shared.StatusCliente", b =>
                 {
                     b.Property<byte>("IdStatus")
                         .HasColumnType("INTEGER");
@@ -175,16 +175,16 @@ namespace ProvaCode7.Server.Migrations
                     b.ToTable("StatusCliente");
                 });
 
-            modelBuilder.Entity("ProvaCode7.Shared.Cliente", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Shared.Cliente", b =>
                 {
-                    b.HasOne("ProvaCode7.Shared.Endereco", "Endereco")
+                    b.HasOne("ProjetoCallCenter.Shared.Endereco", "Endereco")
                         .WithOne("Cliente")
-                        .HasForeignKey("ProvaCode7.Shared.Cliente", "IdEndereco")
+                        .HasForeignKey("ProjetoCallCenter.Shared.Cliente", "IdEndereco")
                         .HasConstraintName("ForeignKey_Cliente_Endereco")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProvaCode7.Shared.StatusCliente", "StatusCliente")
+                    b.HasOne("ProjetoCallCenter.Shared.StatusCliente", "StatusCliente")
                         .WithMany("Clientes")
                         .HasForeignKey("IdStatus")
                         .HasConstraintName("ForeignKey_Cliente_StatusCliente")
@@ -192,9 +192,9 @@ namespace ProvaCode7.Server.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProvaCode7.Shared.Produto", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Shared.Produto", b =>
                 {
-                    b.HasOne("ProvaCode7.Shared.CategoriaProduto", "CategoriaProduto")
+                    b.HasOne("ProjetoCallCenter.Shared.CategoriaProduto", "CategoriaProduto")
                         .WithMany("Produtos")
                         .HasForeignKey("IdCategoria")
                         .HasConstraintName("ForeignKey_Produto_CategoriaProduto")

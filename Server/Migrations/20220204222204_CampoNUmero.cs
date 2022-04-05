@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ProvaCode7.Server.Migrations
+namespace ProjetoCallCenter.Server.Migrations
 {
     public partial class CampoNUmero : Migration
     {

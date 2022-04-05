@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProvaCode7.Server;
+using ProjetoCallCenter.Server;
 
-namespace ProvaCode7.Server.Migrations
+namespace ProjetoCallCenter.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20220201012401_AjusteRelecao")]
@@ -18,7 +18,7 @@ namespace ProvaCode7.Server.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.15");
 
-            modelBuilder.Entity("ProvaCode7.Models.CategoriaProduto", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Models.CategoriaProduto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,7 @@ namespace ProvaCode7.Server.Migrations
                     b.ToTable("CategoriaProduto");
                 });
 
-            modelBuilder.Entity("ProvaCode7.Models.Cliente", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Models.Cliente", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -81,7 +81,7 @@ namespace ProvaCode7.Server.Migrations
                     b.ToTable("Cliente");
                 });
 
-            modelBuilder.Entity("ProvaCode7.Models.Endereco", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Models.Endereco", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -122,7 +122,7 @@ namespace ProvaCode7.Server.Migrations
                     b.ToTable("Endereco");
                 });
 
-            modelBuilder.Entity("ProvaCode7.Models.Produto", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Models.Produto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -151,19 +151,19 @@ namespace ProvaCode7.Server.Migrations
                     b.ToTable("Produto");
                 });
 
-            modelBuilder.Entity("ProvaCode7.Models.Cliente", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Models.Cliente", b =>
                 {
-                    b.HasOne("ProvaCode7.Models.Endereco", "Endereco")
+                    b.HasOne("ProjetoCallCenter.Models.Endereco", "Endereco")
                         .WithOne("Cliente")
-                        .HasForeignKey("ProvaCode7.Models.Cliente", "IdEndereco")
+                        .HasForeignKey("ProjetoCallCenter.Models.Cliente", "IdEndereco")
                         .HasConstraintName("ForeignKey_Cliente_Endereco")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProvaCode7.Models.Produto", b =>
+            modelBuilder.Entity("ProjetoCallCenter.Models.Produto", b =>
                 {
-                    b.HasOne("ProvaCode7.Models.CategoriaProduto", "CategoriaProduto")
+                    b.HasOne("ProjetoCallCenter.Models.CategoriaProduto", "CategoriaProduto")
                         .WithMany("Produtos")
                         .HasForeignKey("IdCategoria")
                         .HasConstraintName("ForeignKey_Produto_CategoriaProduto")

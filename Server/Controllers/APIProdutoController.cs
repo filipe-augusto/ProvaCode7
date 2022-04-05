@@ -2,14 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using ProvaCode7.Shared;
+using ProjetoCallCenter.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 
-namespace ProvaCode7.Server.Controllers
+namespace ProjetoCallCenter.Server.Controllers
 {
 
     [Route("api/[controller]")]

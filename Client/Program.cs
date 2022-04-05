@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProvaCode7.Client
+namespace ProjetoCallCenter.Client
 {
     public class Program
     {

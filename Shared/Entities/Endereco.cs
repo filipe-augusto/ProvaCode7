@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProvaCode7.Shared
+namespace ProjetoCallCenter.Shared
 {
     public class Endereco : Base
     {

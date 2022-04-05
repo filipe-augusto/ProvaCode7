@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProvaCode7.Shared;
+using ProjetoCallCenter.Shared;
 
-namespace ProvaCode7.Server
+namespace ProjetoCallCenter.Server
 {
     public class AppDbContext : DbContext
     {

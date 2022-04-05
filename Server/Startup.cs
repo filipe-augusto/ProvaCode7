@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ProvaCode7.Shared;
+using ProjetoCallCenter.Shared;
 
-namespace ProvaCode7.Server
+namespace ProjetoCallCenter.Server
 {
     public class Startup
     {

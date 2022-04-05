@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ProvaCode7.Shared
+namespace ProjetoCallCenter.Shared
 {
     public class CategoriaProduto : Base
     {
